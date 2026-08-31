@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Ledger AI</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+    <!-- Main Content Area -->
+    <div class="admin-main">
+      <header class="admin-header" id="admin-header"></header>
+
+      <main class="admin-content">
+
+        <!-- Top Welcome & Refresh Row -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800; margin: 0; color: var(--admin-text-main);">
+              System Overview & Operations
+            </h2>
+            <p style="font-size: 13px; color: var(--admin-text-muted); margin: 4px 0 0 0;">
+              Live platform metrics, user transactions, and system health status.
+            </p>
+          </div>
+          <button class="btn-admin-secondary" onclick="loadDashboard()">
+            <span>🔄</span> Refresh Data
+          </button>
+        </div>
+
+        <!-- 6 KPI Cards -->
+        <div class="admin-cards-grid">
+          <!-- Total Users -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Total Users</span>
+              <div class="admin-kpi-icon" style="background: rgba(79, 70, 229, 0.1); color: #4F46E5;">👥</div>
+            </div>
+            <div class="admin-kpi-val" id="card-total-users">-</div>
+            <div class="admin-kpi-sub">Registered accounts</div>
+          </div>
+
+          <!-- Active Users -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Active Users</span>
+              <div class="admin-kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">✅</div>
+            </div>
+            <div class="admin-kpi-val" style="color: #10B981;" id="card-active-users">-</div>
+            <div class="admin-kpi-sub">Enabled login status</div>
+          </div>
+
+          <!-- Inactive Users -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Inactive Users</span>
+              <div class="admin-kpi-icon" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;">⏸️</div>
+            </div>
+            <div class="admin-kpi-val" style="color: #EF4444;" id="card-inactive-users">-</div>
+            <div class="admin-kpi-sub">Suspended or inactive</div>
+          </div>
+
+          <!-- Total Transactions -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Total Transactions</span>
+              <div class="admin-kpi-icon" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">💳</div>
+            </div>
+            <div class="admin-kpi-val" id="card-total-tx">-</div>
+            <div class="admin-kpi-sub">Across all accounts</div>
+          </div>
+
+          <!-- Total Income -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Total Income</span>
+              <div class="admin-kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">📈</div>
+            </div>
+            <div class="admin-kpi-val" style="color: #059669;" id="card-total-income">-</div>
+            <div class="admin-kpi-sub">Gross logged inflow</div>
+          </div>
+
+          <!-- Total Expenses -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Total Expenses</span>
+              <div class="admin-kpi-icon" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;">📉</div>
+            </div>
+            <div class="admin-kpi-val" style="color: #DC2626;" id="card-total-expenses">-</div>
+            <div class="admin-kpi-sub">Gross logged outflow</div>
+          </div>
+        </div>
+
+        <!-- 4 Chart.js Charts -->
+        <div class="admin-charts-grid">
+          <!-- User Growth Chart -->
+          <div class="admin-chart-card">
+            <div class="admin-chart-header">
+              <h3 class="admin-chart-title">📈 Monthly User Registrations</h3>
+            </div>
+            <div class="admin-chart-wrapper">
+              <canvas id="chart-user-growth"></canvas>
+            </div>
+          </div>
+
+          <!-- Income vs Expenses Chart -->
+          <div class="admin-chart-card">
+            <div class="admin-chart-header">
+              <h3 class="admin-chart-title">⚖️ Income vs Expenses (Past 6 Months)</h3>
+            </div>
+            <div class="admin-chart-wrapper">
+              <canvas id="chart-income-vs-expenses"></canvas>
+            </div>
+          </div>
+
+          <!-- Expense Categories Chart -->
+          <div class="admin-chart-card">
+            <div class="admin-chart-header">
+              <h3 class="admin-chart-title">🍩 Expense Distribution by Category</h3>
+            </div>
+            <div class="admin-chart-wrapper">
+              <canvas id="chart-categories"></canvas>
+            </div>
+          </div>
+
+          <!-- Monthly Transactions Chart -->
+          <div class="admin-chart-card">
+            <div class="admin-chart-header">
+              <h3 class="admin-chart-title">📊 Monthly Transaction Activity</h3>
+            </div>
+            <div class="admin-chart-wrapper">
+              <canvas id="chart-monthly-tx"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Table -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">⚡ Real-Time Recent Platform Activity</h3>
+              <p style="font-size: 12px; color: var(--admin-text-muted); margin: 2px 0 0 0;">
+                Latest transaction entries recorded in the MySQL database.
+              </p>
+            </div>
+            <a href="/admin-transactions.html" class="btn-admin-secondary" style="font-size: 12px; padding: 6px 12px;">
+              View All Transactions →
+            </a>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Activity Description</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-recent-activity-tbody">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 24px; color: var(--admin-text-muted);">
+                    Loading recent activity...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

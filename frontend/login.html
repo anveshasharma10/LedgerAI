@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — LedgerAI Financial Suite</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/auth.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body class="auth-body">
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="logo-icon" style="background: #0F172A; color: #FFFFFF; font-size: 18px; font-weight: 800; border-radius: 8px;">◆</div>
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Sign in to your financial ledger</p>
+      </div>
+
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="name@domain.com" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required />
+            <button type="button" class="toggle-password-btn" onclick="togglePassVisibility('login-password')">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+          Sign In →
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="/register.html">Create Account</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/common.js"></script>
+  <script>
+    function togglePassVisibility(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('btn-login');
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Signing In...`;
+
+      try {
+        const data = await Auth.login(email, password);
+        UI.toast('Sign in successful!', 'success');
+        setTimeout(() => {
+          if (data && data.user && data.user.role === 'admin') {
+            window.location.href = '/admin.html';
+          } else {
+            window.location.href = '/dashboard.html';
+          }
+        }, 400);
+      } catch (err) {
+        UI.toast(err.message || 'Invalid credentials', 'error');
+        btn.disabled = false;
+        btn.innerHTML = 'Sign In →';
+      }
+    });
+  </script>
+</body>
+</html>

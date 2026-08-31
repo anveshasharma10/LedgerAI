@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security & Audit Logs — Ledger AI Admin</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+    <div class="admin-main">
+      <header class="admin-header" id="admin-header"></header>
+
+      <main class="admin-content">
+
+        <!-- Top Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800; margin: 0; color: var(--admin-text-main);">
+              Security & Administrative Audit Logs
+            </h2>
+            <p style="font-size: 13px; color: var(--admin-text-muted); margin: 4px 0 0 0;">
+              Immutable record of all administrative logins, privilege escalations, and account status modifications.
+            </p>
+          </div>
+          <button class="btn-admin-secondary" onclick="loadAuditLogs()">
+            <span>🔄</span> Refresh Logs
+          </button>
+        </div>
+
+        <div class="admin-card">
+          <!-- Filters Toolbar -->
+          <div class="admin-card-header">
+            <div class="admin-filter-bar">
+              <input
+                type="text"
+                id="search-input"
+                class="admin-search-input"
+                placeholder="Search admin, target, or details..."
+                oninput="debounceSearch()"
+                style="min-width: 260px;"
+              />
+
+              <select id="action-filter" class="admin-select" onchange="loadAuditLogs(1)">
+                <option value="all">All Actions</option>
+              </select>
+            </div>
+            
+            <div style="font-size: 13px; color: var(--admin-text-muted);" id="logs-count-display">
+              Loading audit logs...
+            </div>
+          </div>
+
+          <!-- Audit Logs Table -->
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Admin User</th>
+                  <th>Action</th>
+                  <th>Target Entity</th>
+                  <th>Details</th>
+                  <th>IP Address</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table-tbody">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 32px; color: var(--admin-text-muted);">
+                    Loading audit trail...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div class="admin-pagination">
+            <div id="pagination-info">Showing page 1</div>
+            <div class="admin-pagination-btns">
+              <button class="btn-admin-secondary" id="btn-prev-page" onclick="prevPage()" disabled>
+                ← Previous
+              </button>
+              <button class="btn-admin-secondary" id="btn-next-page" onclick="nextPage()" disabled>
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/admin-audit.js"></script>
+</body>
+</html>

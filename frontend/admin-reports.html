@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Platform Reports & Export — Ledger AI Admin</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+    <div class="admin-main">
+      <header class="admin-header" id="admin-header"></header>
+
+      <main class="admin-content">
+
+        <!-- Top Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800; margin: 0; color: var(--admin-text-main);">
+              Platform Reports & Data Export Center
+            </h2>
+            <p style="font-size: 13px; color: var(--admin-text-muted); margin: 4px 0 0 0;">
+              Generate and download comprehensive administrative audit sheets and financial statements.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-admin-secondary" onclick="window.print()">
+              <span>🖨️</span> Print / PDF
+            </button>
+            <button class="btn-admin-primary" onclick="exportCSV()">
+              <span>📥</span> Export to CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Report Selector Tabs/Filter -->
+        <div class="admin-card" style="margin-bottom: 20px;">
+          <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+            <label style="font-weight: 700; font-size: 13px; color: var(--admin-text-main);">Select Report Type:</label>
+            <select id="report-type-select" class="admin-select" onchange="switchReportType()" style="min-width: 240px;">
+              <option value="financial">1. Platform Financial & Category Summary</option>
+              <option value="users">2. User Accounts & Balances Directory</option>
+              <option value="activity">3. Comprehensive Activity & Transactions Log</option>
+            </select>
+
+            <button class="btn-admin-secondary" onclick="loadSelectedReport()">
+              <span>🔄</span> Refresh Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Report Content Card -->
+        <div class="admin-card" id="report-container">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title" id="report-title">Financial Summary Report</h3>
+              <p style="font-size: 12px; color: var(--admin-text-muted); margin: 2px 0 0 0;" id="report-subtitle">
+                Generated from live MySQL database records.
+              </p>
+            </div>
+            <div id="report-meta-badge" style="font-size: 12px; font-weight: 600; color: var(--admin-primary);">
+              Report Ready
+            </div>
+          </div>
+
+          <!-- Report Dynamic Area -->
+          <div id="report-dynamic-content">
+            <div style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
+              Loading report dataset...
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/admin-reports.js"></script>
+</body>
+</html>

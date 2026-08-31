@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Financial Assistant — AI Expense & Budget Manager</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body>
+
+  <div class="app-container">
+    <nav class="app-sidebar" id="app-sidebar"></nav>
+
+    <div class="app-main">
+      <header class="top-header" id="top-header"></header>
+
+      <main class="page-content">
+
+        <!-- Chat Container Card -->
+        <div class="chat-container">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="chat-header-avatar">🤖</div>
+            <div>
+              <h3 style="font-family: var(--font-serif); font-size: 17px; font-weight: 700;">Financial Intelligence Advisor</h3>
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--success); font-weight: 700;">
+                ● Powered by Gemini 2.5 Flash
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Messages Area -->
+          <div class="chat-messages" id="chat-messages">
+            <!-- Initial Welcome AI Bubble -->
+            <div class="chat-bubble ai">
+              <h3>Greetings, Alex.</h3>
+              <p>
+                I am your financial co-pilot with real-time access to your ledger, spending trends, and budget rules.
+              </p>
+              <p>
+                You can ask me questions about your monthly spending, overspending risk, savings recommendations, or category optimization.
+              </p>
+            </div>
+          </div>
+
+          <!-- Fast Prompt Chips -->
+          <div class="chat-prompt-chips" id="prompt-chips-container"></div>
+
+          <!-- Input Bar -->
+          <form id="chat-form" class="chat-input-bar">
+            <input type="text" id="chat-input" class="form-control" placeholder="Ask anything about your income, expenses, or financial strategy..." autocomplete="off" required />
+            <button type="submit" class="btn btn-primary btn-sm">
+              Send →
+            </button>
+          </form>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/ai-assistant.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.initAIAssistant();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Health & Diagnostics — Ledger AI Admin</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+    <div class="admin-main">
+      <header class="admin-header" id="admin-header"></header>
+
+      <main class="admin-content">
+
+        <!-- Top Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800; margin: 0; color: var(--admin-text-main);">
+              System Health & Diagnostics
+            </h2>
+            <p style="font-size: 13px; color: var(--admin-text-muted); margin: 4px 0 0 0;">
+              Real-time monitoring of backend runtime, MySQL database connectivity, and microservices.
+            </p>
+          </div>
+          <button class="btn-admin-secondary" onclick="loadSystemHealth()">
+            <span>🔄</span> Run Diagnostics
+          </button>
+        </div>
+
+        <!-- Microservices Status Cards -->
+        <div class="admin-cards-grid">
+          <!-- Backend Express Server -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Core Backend</span>
+              <div class="status-indicator status-online" id="status-backend">
+                <span class="status-dot"></span> Online
+              </div>
+            </div>
+            <div class="admin-kpi-val" style="font-size: 18px;">Express Server</div>
+            <div class="admin-kpi-sub">Port 3000 • Node.js Engine</div>
+          </div>
+
+          <!-- MySQL Database -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Persistence Layer</span>
+              <div class="status-indicator status-online" id="status-db">
+                <span class="status-dot"></span> Online
+              </div>
+            </div>
+            <div class="admin-kpi-val" style="font-size: 18px;">MySQL Database</div>
+            <div class="admin-kpi-sub">Transaction store active</div>
+          </div>
+
+          <!-- AI Assistant Service -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">AI Intelligence</span>
+              <div class="status-indicator status-online" id="status-ai">
+                <span class="status-dot"></span> Ready
+              </div>
+            </div>
+            <div class="admin-kpi-val" style="font-size: 18px;">Gemini 2.5 Engine</div>
+            <div class="admin-kpi-sub">Advisor & Smart Tagging</div>
+          </div>
+
+          <!-- Server Uptime -->
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">System Uptime</span>
+              <div class="admin-kpi-icon" style="background: rgba(79, 70, 229, 0.1); color: #4F46E5;">⏱️</div>
+            </div>
+            <div class="admin-kpi-val" style="font-size: 20px;" id="val-uptime">-</div>
+            <div class="admin-kpi-sub">Continuous session duration</div>
+          </div>
+        </div>
+
+        <!-- 2 Column Technical Diagnostics Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
+          <!-- Node.js Runtime & Memory -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">🖥️ Server Runtime & Memory Usage</h3>
+            </div>
+
+            <table class="admin-table">
+              <tbody>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">Runtime Environment</td>
+                  <td style="font-family: monospace; font-weight: 700;" id="diag-env">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">Node.js Version</td>
+                  <td style="font-family: monospace; font-weight: 700;" id="diag-node-ver">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">Memory Heap Used</td>
+                  <td style="font-family: monospace; font-weight: 700; color: var(--admin-primary);" id="diag-heap-used">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">Memory Heap Total</td>
+                  <td style="font-family: monospace;" id="diag-heap-total">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">Resident Set Size (RSS)</td>
+                  <td style="font-family: monospace;" id="diag-rss">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Database Record Counts -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">🗄️ Database Tables & Record Metrics</h3>
+            </div>
+
+            <table class="admin-table">
+              <tbody>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">User Profiles (`users`)</td>
+                  <td style="font-family: monospace; font-weight: 700; color: var(--admin-primary);" id="tbl-users">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">Expenses Recorded (`expenses`)</td>
+                  <td style="font-family: monospace; font-weight: 700; color: var(--admin-danger);" id="tbl-expenses">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">Incomes Recorded (`income`)</td>
+                  <td style="font-family: monospace; font-weight: 700; color: var(--admin-success);" id="tbl-income">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">User Budgets (`budgets`)</td>
+                  <td style="font-family: monospace; font-weight: 700;" id="tbl-budgets">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">AI Advisory Records (`ai_insights`)</td>
+                  <td style="font-family: monospace; font-weight: 700;" id="tbl-ai">-</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600; color: var(--admin-text-muted);">Security Logs (`audit_logs`)</td>
+                  <td style="font-family: monospace; font-weight: 700;" id="tbl-audit">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/admin-system.js"></script>
+</body>
+</html>

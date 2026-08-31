@@ -1,0 +1,6 @@
+{
+  "name": "AI Expense & Budget Manager",
+  "description": "Professional AI-powered personal finance, expense tracking, smart budget recommendations, spending analysis, and financial assistant with MySQL and Gemini AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

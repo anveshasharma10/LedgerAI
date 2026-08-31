@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Analytics — AI Expense & Budget Manager</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <nav class="app-sidebar" id="app-sidebar"></nav>
+
+    <div class="app-main">
+      <header class="top-header" id="top-header"></header>
+
+      <main class="page-content">
+
+        <!-- Top Header & MoM Banner -->
+        <div style="margin-bottom: 28px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); font-weight: 700;">
+            Deep Quantitative Metrics
+          </div>
+          <h2 style="font-family: var(--font-serif); font-size: 32px; font-weight: 700; margin-bottom: 8px;">
+            Financial Analytics & Trends
+          </h2>
+          <div class="mom-comparison-box" id="mom-comparison-text">
+            Month-over-Month Comparison: Calculating variance...
+          </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Gross Income</span>
+              <div class="metric-icon income">💵</div>
+            </div>
+            <div class="metric-value" id="an-income" style="color: var(--success);">₹0.00</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Cumulative Expenses</span>
+              <div class="metric-icon expense">💸</div>
+            </div>
+            <div class="metric-value" id="an-expenses" style="color: var(--danger);">₹0.00</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Net Surplus</span>
+              <div class="metric-icon balance">⚖️</div>
+            </div>
+            <div class="metric-value" id="an-balance">₹0.00</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Savings Rate</span>
+              <div class="metric-icon savings">📈</div>
+            </div>
+            <div class="metric-value" id="an-savings-rate">0%</div>
+          </div>
+        </div>
+
+        <!-- Analytics Charts Grid 1: Category Doughnut + Monthly Inflow vs Outflow -->
+        <div class="analytics-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+          <!-- Category Spending Breakdown -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Category Spending Distribution</h3>
+                <p class="card-subtitle">All-time category share</p>
+              </div>
+            </div>
+            <div class="chart-container-large" style="height: 300px; position: relative;">
+              <canvas id="analyticsCategoryChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Monthly Income vs Expense Bar Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Monthly Inflow vs Outflow</h3>
+                <p class="card-subtitle">Comparison across trailing months</p>
+              </div>
+            </div>
+            <div class="chart-container-large" style="height: 300px; position: relative;">
+              <canvas id="analyticsMonthlyBarChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics Charts Grid 2: Expense Trend Line + Net Savings Trend Line -->
+        <div class="analytics-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <!-- Expense Trend Line -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Expense Trajectory</h3>
+                <p class="card-subtitle">Monthly spending trend curve</p>
+              </div>
+            </div>
+            <div class="chart-container-large" style="height: 300px; position: relative;">
+              <canvas id="analyticsExpenseLineChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Net Savings Trend -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Net Savings Trajectory</h3>
+                <p class="card-subtitle">Capital accumulation over time</p>
+              </div>
+            </div>
+            <div class="chart-container-large" style="height: 300px; position: relative;">
+              <canvas id="analyticsSavingsTrendChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/analytics.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.initAnalytics();
+    });
+  </script>
+</body>
+</html>

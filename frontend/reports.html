@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Reports & Statements — AI Expense & Budget Manager</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body>
+
+  <div class="app-container">
+    <nav class="app-sidebar" id="app-sidebar"></nav>
+
+    <div class="app-main">
+      <header class="top-header" id="top-header"></header>
+
+      <main class="page-content">
+
+        <!-- Top Header & Period Selector -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); font-weight: 700;">
+              Accounting Archives
+            </div>
+            <h2 style="font-family: var(--font-serif); font-size: 32px; font-weight: 700;">
+              Statements & Audits
+            </h2>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <select id="report-month-select" class="form-control" style="width: auto;">
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+
+            <select id="report-year-select" class="form-control" style="width: auto;"></select>
+          </div>
+        </div>
+
+        <!-- Report Tabs Navigation -->
+        <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+          <button class="btn btn-secondary btn-sm report-tab-btn active" data-tab="monthly" onclick="switchReportTab('monthly')">
+            Monthly Statement
+          </button>
+          <button class="btn btn-secondary btn-sm report-tab-btn" data-tab="yearly" onclick="switchReportTab('yearly')">
+            Annual Summary
+          </button>
+          <button class="btn btn-secondary btn-sm report-tab-btn" data-tab="category" onclick="switchReportTab('category')">
+            Category Breakdown
+          </button>
+        </div>
+
+        <!-- Report Content Card -->
+        <div class="card" id="report-content-container">
+          <div style="text-align: center; padding: 40px;">
+            <div class="spinner"></div> Generating financial statement...
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/reports.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.initReports();
+    });
+  </script>
+</body>
+</html>

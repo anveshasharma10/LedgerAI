@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — AI Expense & Budget Manager</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Navigation Sidebar -->
+    <nav class="app-sidebar" id="app-sidebar"></nav>
+
+    <!-- Main Content Area -->
+    <div class="app-main">
+      <!-- Top Sticky Header -->
+      <header class="top-header" id="top-header"></header>
+
+      <!-- Page Body -->
+      <main class="page-content">
+
+        <!-- Quick Actions Bar -->
+        <div class="quick-actions-bar">
+          <a href="/expenses.html" class="btn btn-primary btn-sm">+ Log Expense</a>
+          <a href="/income.html" class="btn btn-secondary btn-sm">+ Log Income</a>
+          <a href="/budgets.html" class="btn btn-secondary btn-sm">🎯 View Budgets</a>
+          <a href="/ai-assistant.html" class="btn btn-ai btn-sm">✨ Ask AI Assistant</a>
+        </div>
+
+        <!-- Metrics Grid (Top KPI Cards) -->
+        <div class="metrics-grid">
+          <!-- Total Income -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Total Income</span>
+              <div class="metric-icon income">💵</div>
+            </div>
+            <div class="metric-value" id="metric-income" style="color: var(--success);">₹0.00</div>
+            <div class="metric-sub">Recorded Inflows</div>
+          </div>
+
+          <!-- Total Expenses -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Total Expenses</span>
+              <div class="metric-icon expense">💸</div>
+            </div>
+            <div class="metric-value" id="metric-expenses" style="color: var(--danger);">₹0.00</div>
+            <div class="metric-sub">Recorded Outflows</div>
+          </div>
+
+          <!-- Net Balance -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Net Balance</span>
+              <div class="metric-icon balance">⚖️</div>
+            </div>
+            <div class="metric-value" id="metric-balance">₹0.00</div>
+            <div class="metric-sub">Available Capital</div>
+          </div>
+
+          <!-- Savings Rate -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Savings Rate</span>
+              <div class="metric-icon savings">📈</div>
+            </div>
+            <div class="metric-value" id="metric-savings-rate">0%</div>
+            <div class="metric-sub" id="metric-savings">₹0.00 Net Saved</div>
+          </div>
+        </div>
+
+        <!-- 2-Column Dashboard Grid: Chart + AI Insights -->
+        <div class="dashboard-grid">
+          <!-- Left: Category Spending Breakdown Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Expense Allocation</h3>
+                <p class="card-subtitle">Distribution by category</p>
+              </div>
+              <a href="/analytics.html" class="btn btn-secondary btn-sm">Full Analytics →</a>
+            </div>
+            <div class="chart-box" id="chart-container">
+              <canvas id="expenseDoughnutChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Right: AI Financial Insights -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">AI Intelligence Feed</h3>
+                <p class="card-subtitle">Continuous anomaly & budget analysis</p>
+              </div>
+              <a href="/ai-assistant.html" class="btn btn-ai btn-sm">✨ Consult AI</a>
+            </div>
+            <div class="ai-insights-list" id="ai-insights-container">
+              <div style="text-align: center; padding: 24px;">
+                <div class="spinner"></div> Loading AI insights...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions Table -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Recent Activity</h3>
+              <p class="card-subtitle">Latest recorded ledger entries</p>
+            </div>
+            <a href="/transactions.html" class="btn btn-secondary btn-sm">All Transactions →</a>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Category / Source</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="recent-transactions-tbody">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 24px;">
+                    <div class="spinner"></div> Loading recent records...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.initDashboard();
+    });
+  </script>
+</body>
+</html>

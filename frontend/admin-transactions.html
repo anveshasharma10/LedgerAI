@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transaction Monitoring — Ledger AI Admin</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+    <div class="admin-main">
+      <header class="admin-header" id="admin-header"></header>
+
+      <main class="admin-content">
+
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800; margin: 0; color: var(--admin-text-main);">
+              Cross-Platform Transaction Feed
+            </h2>
+            <p style="font-size: 13px; color: var(--admin-text-muted); margin: 4px 0 0 0;">
+              Real-time audit stream of all financial income and expense activities across all accounts.
+            </p>
+          </div>
+          <button class="btn-admin-secondary" onclick="loadTransactions()">
+            <span>🔄</span> Refresh
+          </button>
+        </div>
+
+        <div class="admin-card">
+          <!-- Comprehensive Filters Toolbar -->
+          <div class="admin-card-header" style="align-items: flex-start;">
+            <div class="admin-filter-bar" style="flex: 1;">
+              <!-- Search -->
+              <input
+                type="text"
+                id="search-input"
+                class="admin-search-input"
+                placeholder="Search description, category, user..."
+                oninput="debounceSearch()"
+                style="min-width: 240px;"
+              />
+
+              <!-- Type filter -->
+              <select id="type-filter" class="admin-select" onchange="loadTransactions(1)">
+                <option value="all">All Types</option>
+                <option value="expense">Expenses Only</option>
+                <option value="income">Income Only</option>
+              </select>
+
+              <!-- Category filter -->
+              <select id="category-filter" class="admin-select" onchange="loadTransactions(1)">
+                <option value="all">All Categories</option>
+              </select>
+
+              <!-- User filter -->
+              <select id="user-filter" class="admin-select" onchange="loadTransactions(1)">
+                <option value="">All Users</option>
+              </select>
+
+              <!-- Start Date -->
+              <input
+                type="date"
+                id="start-date-filter"
+                class="admin-select"
+                title="Start Date"
+                onchange="loadTransactions(1)"
+              />
+
+              <!-- End Date -->
+              <input
+                type="date"
+                id="end-date-filter"
+                class="admin-select"
+                title="End Date"
+                onchange="loadTransactions(1)"
+              />
+
+              <button class="btn-admin-secondary" onclick="resetFilters()" style="padding: 7px 12px; font-size: 12px;">
+                Clear Filters
+              </button>
+            </div>
+            
+            <div style="font-size: 13px; color: var(--admin-text-muted);" id="tx-count-display">
+              Loading transactions...
+            </div>
+          </div>
+
+          <!-- Transactions Table -->
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>User</th>
+                  <th>Type</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Payment Method</th>
+                  <th style="text-align: right;">Amount</th>
+                </tr>
+              </thead>
+              <tbody id="tx-table-tbody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 32px; color: var(--admin-text-muted);">
+                    Loading transactions...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div class="admin-pagination">
+            <div id="pagination-info">Showing page 1</div>
+            <div class="admin-pagination-btns">
+              <button class="btn-admin-secondary" id="btn-prev-page" onclick="prevPage()" disabled>
+                ← Previous
+              </button>
+              <button class="btn-admin-secondary" id="btn-next-page" onclick="nextPage()" disabled>
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/admin-transactions.js"></script>
+</body>
+</html>

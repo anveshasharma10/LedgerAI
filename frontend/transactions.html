@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transaction Ledger — AI Expense & Budget Manager</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/expenses.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body>
+
+  <div class="app-container">
+    <nav class="app-sidebar" id="app-sidebar"></nav>
+
+    <div class="app-main">
+      <header class="top-header" id="top-header"></header>
+
+      <main class="page-content">
+
+        <!-- Top Header & CSV Export -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); font-weight: 700;">
+              Unified Ledger
+            </div>
+            <h2 style="font-family: var(--font-serif); font-size: 32px; font-weight: 700;">
+              All Financial Transactions
+            </h2>
+          </div>
+
+          <button class="btn btn-secondary" onclick="exportTransactionsCSV()">
+            📥 Export CSV
+          </button>
+        </div>
+
+        <!-- Ledger Summary Strip -->
+        <div class="metrics-grid" style="margin-bottom: 24px;">
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Filtered Inflow</span>
+              <div class="metric-icon income">💵</div>
+            </div>
+            <div class="metric-value" id="total-ledger-income" style="color: var(--success);">₹0.00</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Filtered Outflow</span>
+              <div class="metric-icon expense">💸</div>
+            </div>
+            <div class="metric-value" id="total-ledger-expenses" style="color: var(--danger);">₹0.00</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-title">Net Ledger Balance</span>
+              <div class="metric-icon balance">⚖️</div>
+            </div>
+            <div class="metric-value" id="total-ledger-net">₹0.00</div>
+          </div>
+        </div>
+
+        <!-- Comprehensive Filter Bar -->
+        <div class="filter-bar" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 24px;">
+          <div class="search-input-group" style="flex: 1; min-width: 220px;">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-transaction" class="form-control" placeholder="Search description, category, note..." />
+          </div>
+
+          <div class="filter-select" style="min-width: 130px;">
+            <select id="filter-type" class="form-control">
+              <option value="All">All Types</option>
+              <option value="Expense">Expenses Only</option>
+              <option value="Income">Income Only</option>
+            </select>
+          </div>
+
+          <div class="filter-select" style="min-width: 150px;">
+            <select id="filter-category" class="form-control">
+              <option value="All">All Categories</option>
+              <option value="Food">Food</option>
+              <option value="Rent">Rent</option>
+              <option value="Bills">Bills</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Education">Education</option>
+              <option value="Salary">Salary</option>
+              <option value="Freelance">Freelance</option>
+              <option value="Investment">Investment</option>
+              <option value="Bonus">Bonus</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <input type="date" id="filter-start-date" class="form-control" style="width: 135px; font-size: 12px;" title="From Date" />
+            <span style="color: var(--text-muted); font-size: 12px;">to</span>
+            <input type="date" id="filter-end-date" class="form-control" style="width: 135px; font-size: 12px;" title="To Date" />
+          </div>
+
+          <div class="filter-select" style="min-width: 130px;">
+            <select id="filter-sort-by" class="form-control">
+              <option value="date">Sort by Date</option>
+              <option value="amount">Sort by Amount</option>
+              <option value="category">Sort by Category</option>
+              <option value="description">Sort by Description</option>
+            </select>
+          </div>
+
+          <div class="filter-select" style="min-width: 120px;">
+            <select id="filter-sort-order" class="form-control">
+              <option value="desc">Newest First ↓</option>
+              <option value="asc">Oldest First ↑</option>
+            </select>
+          </div>
+
+          <button id="btn-reset-filters" class="btn btn-secondary btn-sm" style="white-space: nowrap;">
+            ↺ Reset
+          </button>
+        </div>
+
+        <!-- Transactions Ledger Table Card -->
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Payment Method</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="transactions-tbody">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 24px;">
+                    <div class="spinner"></div> Loading transactions ledger...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination-wrapper" id="pagination-container"></div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/transactions.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.initTransactions();
+    });
+  </script>
+</body>
+</html>

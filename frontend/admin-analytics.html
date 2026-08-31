@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Platform Analytics — Ledger AI Admin</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar"></aside>
+
+    <div class="admin-main">
+      <header class="admin-header" id="admin-header"></header>
+
+      <main class="admin-content">
+
+        <!-- Top Row -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800; margin: 0; color: var(--admin-text-main);">
+              Platform Analytics & Financial Velocity
+            </h2>
+            <p style="font-size: 13px; color: var(--admin-text-muted); margin: 4px 0 0 0;">
+              High-level statistical breakdown of user registrations, category allocations, and monthly cash flow.
+            </p>
+          </div>
+          <button class="btn-admin-secondary" onclick="loadAnalytics()">
+            <span>🔄</span> Refresh Analytics
+          </button>
+        </div>
+
+        <!-- Summary Metric Cards -->
+        <div class="admin-cards-grid">
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Cumulative Users</span>
+              <div class="admin-kpi-icon" style="background: rgba(79, 70, 229, 0.1); color: #4F46E5;">👥</div>
+            </div>
+            <div class="admin-kpi-val" id="kpi-total-users">-</div>
+            <div class="admin-kpi-sub" id="kpi-active-users">- Active Accounts</div>
+          </div>
+
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Gross Platform Inflow</span>
+              <div class="admin-kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">💵</div>
+            </div>
+            <div class="admin-kpi-val" style="color: #059669;" id="kpi-gross-income">-</div>
+            <div class="admin-kpi-sub">Total user deposits/salaries</div>
+          </div>
+
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Gross Platform Outflow</span>
+              <div class="admin-kpi-icon" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;">💸</div>
+            </div>
+            <div class="admin-kpi-val" style="color: #DC2626;" id="kpi-gross-expenses">-</div>
+            <div class="admin-kpi-sub">Total logged expenses</div>
+          </div>
+
+          <div class="admin-kpi-card">
+            <div class="admin-kpi-header">
+              <span class="admin-kpi-label">Net System Surplus</span>
+              <div class="admin-kpi-icon" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">⚖️</div>
+            </div>
+            <div class="admin-kpi-val" id="kpi-net-surplus">-</div>
+            <div class="admin-kpi-sub" id="kpi-total-tx">- total transactions</div>
+          </div>
+        </div>
+
+        <!-- Analytics Visualizations -->
+        <div class="admin-charts-grid">
+          <!-- 12-Month Inflow vs Outflow Trend -->
+          <div class="admin-chart-card" style="grid-column: 1 / -1;">
+            <div class="admin-chart-header">
+              <h3 class="admin-chart-title">📊 12-Month Financial Flow (Inflow vs Outflow Trend)</h3>
+            </div>
+            <div class="admin-chart-wrapper" style="height: 320px;">
+              <canvas id="chart-annual-flow"></canvas>
+            </div>
+          </div>
+
+          <!-- Cumulative User Growth -->
+          <div class="admin-chart-card">
+            <div class="admin-chart-header">
+              <h3 class="admin-chart-title">📈 Cumulative User Base Growth</h3>
+            </div>
+            <div class="admin-chart-wrapper">
+              <canvas id="chart-user-growth-trend"></canvas>
+            </div>
+          </div>
+
+          <!-- Payment Methods Breakdown -->
+          <div class="admin-chart-card">
+            <div class="admin-chart-header">
+              <h3 class="admin-chart-title">💳 Payment Methods Share</h3>
+            </div>
+            <div class="admin-chart-wrapper">
+              <canvas id="chart-payment-methods"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Expense Categories Table -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">🍩 Category Volume Breakdown</h3>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Transaction Count</th>
+                  <th>Total Outflow (₹)</th>
+                  <th>Average per Entry</th>
+                </tr>
+              </thead>
+              <tbody id="category-stats-tbody">
+                <tr>
+                  <td colspan="4" style="text-align: center; padding: 24px; color: var(--admin-text-muted);">
+                    Loading category breakdown...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/admin-analytics.js"></script>
+</body>
+</html>
