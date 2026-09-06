@@ -6,8 +6,40 @@
       "destination": "/api/index.ts"
     },
     {
-      "source": "/((?!api|css|js|images|assets|uploads|favicon.ico).*)$",
-      "destination": "/frontend/$1.html"
+      "source": "/",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/css/(.*)",
+      "destination": "/frontend/css/$1"
+    },
+    {
+      "source": "/js/(.*)",
+      "destination": "/frontend/js/$1"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "/frontend/images/$1"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/frontend/assets/$1"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "/frontend/uploads/$1"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/frontend/favicon.ico"
+    },
+    {
+      "source": "/:page.html",
+      "destination": "/frontend/:page.html"
+    },
+    {
+      "source": "/:page((?!api|css|js|images|assets|uploads).*)",
+      "destination": "/frontend/:page.html"
     }
   ]
 }
