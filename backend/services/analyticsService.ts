@@ -5,6 +5,7 @@
 
 import { query } from '../config/db.js';
 import { calculateFinancials, getBudgetStatus } from '../utils/helpers.js';
+import { ensureUserBudgetsForPeriod } from './budgetService.js';
 
 export async function getAnalyticsSummary(userId: number) {
   // Income total
@@ -28,11 +29,8 @@ export async function getAnalyticsSummary(userId: number) {
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
 
-  const budgetRows = await query<{ total_amount: number }>(
-    'SELECT SUM(amount) as total_amount FROM budgets WHERE user_id = ? AND month = ? AND year = ?',
-    [userId, currentMonth, currentYear]
-  );
-  const monthlyBudget = parseFloat(budgetRows[0]?.total_amount as any) || 0;
+  const currentBudgets = await ensureUserBudgetsForPeriod(userId, currentMonth, currentYear);
+  const monthlyBudget = currentBudgets.reduce((acc, b) => acc + (parseFloat(b.amount) || 0), 0);
 
   // Expenses this month
   const currentMonthStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
@@ -167,10 +165,7 @@ export async function getBudgetStatusAnalytics(userId: number) {
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
 
-  const budgets = await query<any>(
-    'SELECT * FROM budgets WHERE user_id = ? AND month = ? AND year = ?',
-    [userId, currentMonth, currentYear]
-  );
+  const budgets = await ensureUserBudgetsForPeriod(userId, currentMonth, currentYear);
 
   const currentMonthStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
   const expenses = await query<any>(

@@ -245,7 +245,18 @@ function renderAIRecommendations(data) {
   const modalBody = document.getElementById('ai-recommendation-modal-body');
   if (!modalBody) return;
 
-  const { budgetSplit503020, recommendedBudgets, strategySummary, savingsGoalRecommendation } = data;
+  const strategySummary = data.strategySummary || data.overview || 'AI financial allocation optimized for your monthly income and spending patterns.';
+  const recommendedBudgets = (data.recommendedBudgets || data.allocations || []).map(b => ({
+    category: b.category,
+    recommendedAmount: b.recommendedAmount || b.amount || 0,
+    rationale: b.rationale || b.reasoning || 'Balanced allocation',
+  }));
+  const budgetSplit503020 = data.budgetSplit503020 || {
+    needs: { amount: 25000 },
+    wants: { amount: 15000 },
+    savings: { amount: 10000 },
+  };
+  const targetSavings = data.savingsGoalRecommendation?.targetMonthlySavings ?? data.recommendedSavings ?? 10000;
 
   modalBody.innerHTML = `
     <div style="margin-bottom: 20px; padding: 14px; background: var(--accent-light); border-radius: var(--radius-md); border: 1px solid #ddd6fe;">
@@ -294,13 +305,14 @@ function renderAIRecommendations(data) {
     </div>
 
     <div style="padding: 12px; background: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius-md); font-size: 13px; color: #065f46; margin-bottom: 16px;">
-      💰 <strong>Target Monthly Savings:</strong> ${UI.formatCurrency(savingsGoalRecommendation?.targetMonthlySavings || 0)}
+      💰 <strong>Target Monthly Savings:</strong> ${UI.formatCurrency(targetSavings)}
     </div>
   `;
 }
 
 async function applyAIBudgets() {
-  if (!aiRecommendationsCache || !aiRecommendationsCache.recommendedBudgets) {
+  const list = aiRecommendationsCache?.recommendedBudgets || aiRecommendationsCache?.allocations || [];
+  if (!list || list.length === 0) {
     UI.toast('No recommendations to apply', 'warning');
     return;
   }
@@ -316,11 +328,12 @@ async function applyAIBudgets() {
 
   try {
     let appliedCount = 0;
-    for (const item of aiRecommendationsCache.recommendedBudgets) {
+    for (const item of list) {
+      const targetAmount = item.recommendedAmount || item.amount || 0;
       try {
         await API.post('/budgets', {
           category: item.category,
-          amount: item.recommendedAmount,
+          amount: targetAmount,
           month,
           year,
         });
@@ -330,7 +343,7 @@ async function applyAIBudgets() {
         const match = currentBudgets.find(b => b.category === item.category);
         if (match) {
           await API.put(`/budgets/${match.id}`, {
-            amount: item.recommendedAmount,
+            amount: targetAmount,
             category: item.category,
             month,
             year,

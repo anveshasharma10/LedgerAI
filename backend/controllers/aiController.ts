@@ -78,9 +78,30 @@ export async function getBudgetRecommendation(req: AuthRequest, res: Response): 
       currentBudgets: budgets.map(b => ({ category: b.category, amount: parseFloat(b.amount) || 0 })),
     });
 
+    const incomeBase = summary.totalIncome > 0 ? summary.totalIncome : 50000;
+    const normalizedData = {
+      ...recommendation,
+      recommendedBudgets: (recommendation.allocations || []).map(a => ({
+        category: a.category,
+        recommendedAmount: a.recommendedAmount,
+        rationale: a.reasoning || `${a.percentageOfIncome}% of monthly income`,
+        percentageOfIncome: a.percentageOfIncome,
+        reasoning: a.reasoning,
+      })),
+      strategySummary: recommendation.overview,
+      budgetSplit503020: {
+        needs: { amount: Math.round(incomeBase * 0.50), percentage: 50 },
+        wants: { amount: Math.round(incomeBase * 0.30), percentage: 30 },
+        savings: { amount: Math.round(incomeBase * 0.20), percentage: 20 },
+      },
+      savingsGoalRecommendation: {
+        targetMonthlySavings: recommendation.recommendedSavings,
+      },
+    };
+
     res.json({
       success: true,
-      data: recommendation,
+      data: normalizedData,
     });
   } catch (err: any) {
     console.error('AI Budget Recommendation Error:', err);

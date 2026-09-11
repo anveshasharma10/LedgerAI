@@ -3,30 +3,30 @@
     {
       "id": 1,
       "created_at": "2026-08-20T14:29:34.669Z",
-      "updated_at": "2026-08-31T16:49:25.854Z",
+      "updated_at": "2026-08-20T14:37:41.531Z",
       "name": "System Administrator",
       "email": "admin@ledgerai.com",
-      "password": "$2b$10$9uFykmURltLiqkm.aSNa8O0sgHtX14UJRUgdRUmzyD5roxHeDZ64G",
+      "password": "$2b$10$Dwrus/beEdcV20H1zqE6E.oE3GqdJKF69cxMklSccnXPYCqurUrcC",
       "role": "admin",
       "is_active": 1
     },
     {
       "id": 2,
       "created_at": "2026-08-20T14:29:34.755Z",
-      "updated_at": "2026-08-31T16:49:26.072Z",
+      "updated_at": "2026-08-20T14:37:41.617Z",
       "name": "Alex",
       "email": "demo@example.com",
-      "password": "$2b$10$HRN29g2DYdEZSOuy3RjsV.hLtPD.qwxO6t3uiBdBdOL24/3AivU4W",
+      "password": "$2b$10$aoqQ73yDkDroalbMiBJ5guzFiiWNZmo3Nmhs.jA6Hg5o.vOuLcab.",
       "role": "user",
       "is_active": 1
     },
     {
       "id": 3,
       "created_at": "2026-08-20T14:29:34.853Z",
-      "updated_at": "2026-08-31T16:49:26.263Z",
+      "updated_at": "2026-08-20T14:37:41.704Z",
       "name": "Reva",
       "email": "reva@example.com",
-      "password": "$2b$10$yF7IRwsJO172F1r0c4gGYe8vCQS1YwvoJ0P.KL84n2k.mNiDZnJ12",
+      "password": "$2b$10$cdJKjrn/PTV6iJQ9TzY/9uBxgRDtoYIR6ZgOMUcQwtKJpxjgxqAJO",
       "role": "user",
       "is_active": 1
     }

@@ -19,7 +19,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'ai_expense_manager_jwt_secret_key_
 
 export function authenticateToken(req: AuthRequest, res: Response, next: NextFunction): void {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : null;
+  const token = (authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : null) || (req.query?.token as string);
 
   if (!token) {
     res.status(401).json({

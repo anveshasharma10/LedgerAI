@@ -29,6 +29,14 @@ export async function generateRevaFinancialData(userId: number, options: RevaOpt
     return `${year}-${mm}-${dd}`;
   };
 
+  const formatYMDCurrent = (year: number, month: number, day: number) => {
+    const mm = String(month).padStart(2, '0');
+    const maxDay = Math.max(now.getDate(), 1);
+    const validDay = Math.min(day, maxDay);
+    const dd = String(Math.max(1, validDay)).padStart(2, '0');
+    return `${year}-${mm}-${dd}`;
+  };
+
   // Helper to get past month/year
   const getPastMonth = (offset: number) => {
     let m = currentMonth - offset;
@@ -47,11 +55,11 @@ export async function generateRevaFinancialData(userId: number, options: RevaOpt
 
   // --- 1. DISTINCT INCOME STREAMS (Design Studio Director & UI/UX Consultant) ---
   const incomeRecords = [
-    // Current Month
-    [userId, 92000, 'Salary', 'Lead UI/UX Product Designer Monthly Retainer', formatYMD(m0.year, m0.month, 1)],
-    [userId, 24000, 'Freelance', 'Fintech Mobile App Design System Sprint', formatYMD(m0.year, m0.month, 7)],
-    [userId, 9500, 'Investment', 'Sovereign Gold Bonds & Equity Mutual Fund Dividend', formatYMD(m0.year, m0.month, 15)],
-    [userId, 12000, 'Business', 'Figma UI Component Kit Marketplace Royalties', formatYMD(m0.year, m0.month, 20)],
+    // Current Month (Actively received in month to date)
+    [userId, 92000, 'Salary', 'Lead UI/UX Product Designer Monthly Retainer', formatYMDCurrent(m0.year, m0.month, 1)],
+    [userId, 24000, 'Freelance', 'Fintech Mobile App Design System Sprint', formatYMDCurrent(m0.year, m0.month, 7)],
+    [userId, 9500, 'Investment', 'Sovereign Gold Bonds & Equity Mutual Fund Dividend', formatYMDCurrent(m0.year, m0.month, 8)],
+    [userId, 12000, 'Business', 'Figma UI Component Kit Marketplace Royalties', formatYMDCurrent(m0.year, m0.month, 9)],
 
     // Month -1
     [userId, 92000, 'Salary', 'Lead UI/UX Product Designer Monthly Retainer', formatYMD(m1.year, m1.month, 1)],
@@ -77,55 +85,45 @@ export async function generateRevaFinancialData(userId: number, options: RevaOpt
 
   // --- 2. DISTINCT EXPENSES (Creative Studio, Wellness, Art, Travel & Modern Lifestyle) ---
   const expenseRecords = [
-    // === CURRENT MONTH ===
-    // Rent / Studio Loft
-    [userId, 26000, 'Rent', 'Sunlit Modern Studio Apartment - Indiranagar 4th Block', formatYMD(m0.year, m0.month, 2), 'Bank Transfer', 'Monthly loft rent including maintenance'],
+    // === CURRENT MONTH (Active expenditures filling category budgets realistically) ===
+    // Rent (Rent budget: ₹26,000 -> spent ₹26,000, 100%)
+    [userId, 26000, 'Rent', 'Sunlit Modern Studio Apartment - Indiranagar 4th Block', formatYMDCurrent(m0.year, m0.month, 2), 'Bank Transfer', 'Monthly loft rent including maintenance'],
 
-    // Food & Specialty Cafes
-    [userId, 5800, 'Food', 'Nature’s Basket Gourmet Organics & Italian Pantry', formatYMD(m0.year, m0.month, 3), 'Credit Card', 'Cold-pressed oils, aged cheese, sourdough & berries'],
-    [userId, 1250, 'Food', 'Third Wave Coffee Roasters & Specialty Matchas', formatYMD(m0.year, m0.month, 5), 'UPI', 'Creative sketching afternoon sessions'],
-    [userId, 2400, 'Food', 'Olive Beach Mediterranean Bistro Dinner', formatYMD(m0.year, m0.month, 8), 'Credit Card', 'Dinner with creative team & clients'],
-    [userId, 1680, 'Food', 'Subko Artisanal Bakery & Specialty Pour-overs', formatYMD(m0.year, m0.month, 11), 'UPI', 'Weekend sourdough pastries & cold brews'],
-    [userId, 3100, 'Food', 'Japanese Izakaya Ramen & Sushi Platter', formatYMD(m0.year, m0.month, 14), 'Debit Card', 'Team lunch celebration'],
-    [userId, 1420, 'Food', 'Farm-to-Table Fresh Salad Bowl Deliveries', formatYMD(m0.year, m0.month, 17), 'UPI', 'Healthy workday meals'],
+    // Food & Specialty Cafes (Food budget: ₹16,000 -> spent ₹11,850, 74%)
+    [userId, 5800, 'Food', 'Nature’s Basket Gourmet Organics & Italian Pantry', formatYMDCurrent(m0.year, m0.month, 3), 'Credit Card', 'Cold-pressed oils, aged cheese, sourdough & berries'],
+    [userId, 1250, 'Food', 'Third Wave Coffee Roasters & Specialty Matchas', formatYMDCurrent(m0.year, m0.month, 5), 'UPI', 'Creative sketching afternoon sessions'],
+    [userId, 2400, 'Food', 'Olive Beach Mediterranean Bistro Dinner', formatYMDCurrent(m0.year, m0.month, 8), 'Credit Card', 'Dinner with creative team & clients'],
+    [userId, 1680, 'Food', 'Subko Artisanal Bakery & Specialty Pour-overs', formatYMDCurrent(m0.year, m0.month, 10), 'UPI', 'Weekend sourdough pastries & cold brews'],
+    [userId, 720, 'Food', 'Farm-to-Table Fresh Salad Bowl Deliveries', formatYMDCurrent(m0.year, m0.month, 10), 'UPI', 'Healthy workday meals'],
 
-    // Shopping & Creative Workspace Hardware
-    [userId, 14500, 'Shopping', 'Apple Studio Display 27-inch 5K Monitor Stand & Accs', formatYMD(m0.year, m0.month, 4), 'Credit Card', 'Color-accurate design workspace setup'],
-    [userId, 4800, 'Shopping', 'Zara Minimalist Linen Capsule Wardrobe Collection', formatYMD(m0.year, m0.month, 9), 'Credit Card', 'Design conference attire'],
-    [userId, 2900, 'Shopping', 'Moleskine Smart Writing Set & Japanese Brush Pens', formatYMD(m0.year, m0.month, 13), 'Debit Card', 'Analog wireframing and sketching supplies'],
-    [userId, 3600, 'Shopping', 'Herman Miller Flo Modular Dual Monitor Arm', formatYMD(m0.year, m0.month, 16), 'Credit Card', 'Ergonomic studio desk overhaul'],
+    // Shopping & Creative Workspace Hardware (Shopping budget: ₹18,000 -> spent ₹15,300, 85%)
+    [userId, 8800, 'Shopping', 'Apple Studio Accessories & Ergonomic Desk Mat', formatYMDCurrent(m0.year, m0.month, 4), 'Credit Card', 'Color-accurate design workspace setup'],
+    [userId, 3600, 'Shopping', 'Zara Minimalist Linen Capsule Wardrobe Collection', formatYMDCurrent(m0.year, m0.month, 9), 'Credit Card', 'Design conference attire'],
+    [userId, 2900, 'Shopping', 'Moleskine Smart Writing Set & Japanese Brush Pens', formatYMDCurrent(m0.year, m0.month, 10), 'Debit Card', 'Analog wireframing and sketching supplies'],
 
-    // Bills & Creative Software Subscriptions
-    [userId, 3999, 'Bills', 'Adobe Creative Cloud All Apps & Figma Organization', formatYMD(m0.year, m0.month, 2), 'Credit Card', 'Professional design suite license'],
-    [userId, 2200, 'Bills', 'Act Fibernet Gigabit 1000Mbps Fiber Broadband', formatYMD(m0.year, m0.month, 4), 'UPI', 'High bandwidth cloud asset sync'],
-    [userId, 1950, 'Bills', 'Electricity & Central Studio Air Conditioning', formatYMD(m0.year, m0.month, 6), 'Net Banking', 'Monthly electricity charges'],
-    [userId, 1499, 'Bills', 'Midjourney Pro & Claude AI Pro Subscriptions', formatYMD(m0.year, m0.month, 9), 'Credit Card', 'Generative asset styling & prompt workflows'],
-    [userId, 699, 'Bills', 'Airtel Black 5G Postpaid Executive Plan', formatYMD(m0.year, m0.month, 12), 'UPI', 'Mobile and roaming data'],
+    // Bills & Creative Software Subscriptions (Bills budget: ₹9,000 -> spent ₹8,148, 90.5%)
+    [userId, 3999, 'Bills', 'Adobe Creative Cloud All Apps & Figma Organization', formatYMDCurrent(m0.year, m0.month, 2), 'Credit Card', 'Professional design suite license'],
+    [userId, 2200, 'Bills', 'Act Fibernet Gigabit 1000Mbps Fiber Broadband', formatYMDCurrent(m0.year, m0.month, 4), 'UPI', 'High bandwidth cloud asset sync'],
+    [userId, 1250, 'Bills', 'Electricity & Central Studio Air Conditioning', formatYMDCurrent(m0.year, m0.month, 6), 'Net Banking', 'Monthly electricity charges'],
+    [userId, 699, 'Bills', 'Airtel Black 5G Postpaid Executive Plan', formatYMDCurrent(m0.year, m0.month, 9), 'UPI', 'Mobile and roaming data'],
 
-    // Transport & Eco Mobility
-    [userId, 2800, 'Transport', 'Ather 450X Electric Scooter Smart Grid Charging', formatYMD(m0.year, m0.month, 3), 'UPI', 'Clean daily urban commute'],
-    [userId, 1850, 'Transport', 'Uber Black Airport Transfers to Mumbai Design Fest', formatYMD(m0.year, m0.month, 7), 'Credit Card', 'Design conference transit'],
-    [userId, 1200, 'Transport', 'Namma Metro Executive Smart Pass', formatYMD(m0.year, m0.month, 12), 'UPI', 'Traffic-free cross-city studio commutes'],
-    [userId, 2400, 'Transport', 'Self-drive Outstation EV Rental (Weekend Coorg)', formatYMD(m0.year, m0.month, 18), 'Credit Card', 'Weekend rejuvenation trip'],
+    // Transport & Eco Mobility (Transport budget: ₹8,500 -> spent ₹5,850, 68.8%)
+    [userId, 2800, 'Transport', 'Ather 450X Electric Scooter Smart Grid Charging', formatYMDCurrent(m0.year, m0.month, 3), 'UPI', 'Clean daily urban commute'],
+    [userId, 1850, 'Transport', 'Uber Black Airport Transfers to Mumbai Design Fest', formatYMDCurrent(m0.year, m0.month, 7), 'Credit Card', 'Design conference transit'],
+    [userId, 1200, 'Transport', 'Namma Metro Executive Smart Pass', formatYMDCurrent(m0.year, m0.month, 10), 'UPI', 'Traffic-free cross-city studio commutes'],
 
-    // Entertainment, Culture & Arts
-    [userId, 3500, 'Entertainment', 'National Centre for Performing Arts (NCPA) Symphony', formatYMD(m0.year, m0.month, 6), 'Credit Card', 'Live orchestral classical concert'],
-    [userId, 1400, 'Entertainment', 'Independent Art Cinema Society & MUBI Annual', formatYMD(m0.year, m0.month, 10), 'UPI', 'Curated cinema streaming & indie screenings'],
-    [userId, 2200, 'Entertainment', 'Contemporary Ceramics Pottery Workshop & Clay Kit', formatYMD(m0.year, m0.month, 15), 'Debit Card', 'Mindful weekend sculpting'],
-    [userId, 899, 'Entertainment', 'Apple One Premier (Music, Arcade, TV+ & Fitness+)', formatYMD(m0.year, m0.month, 20), 'Credit Card', 'Family media subscription'],
+    // Entertainment, Culture & Arts (Entertainment budget: ₹7,500 -> spent ₹4,900, 65.3%)
+    [userId, 3500, 'Entertainment', 'National Centre for Performing Arts (NCPA) Symphony', formatYMDCurrent(m0.year, m0.month, 6), 'Credit Card', 'Live orchestral classical concert'],
+    [userId, 1400, 'Entertainment', 'Independent Art Cinema Society & MUBI Annual', formatYMDCurrent(m0.year, m0.month, 10), 'UPI', 'Curated cinema streaming & indie screenings'],
 
-    // Healthcare, Mindfulness & Wellness
-    [userId, 5500, 'Healthcare', 'Ashtanga Yoga Shala & Sound Healing Immersion', formatYMD(m0.year, m0.month, 1), 'UPI', 'Monthly mindfulness and morning yoga'],
-    [userId, 2100, 'Healthcare', 'Organic Plant Protein & Cold-Pressed Herbal Tonics', formatYMD(m0.year, m0.month, 8), 'Debit Card', 'Wellness nutrition & adaptogens'],
-    [userId, 3200, 'Healthcare', 'Ayurvedic Rejuvenation Therapy & Deep Tissue Massage', formatYMD(m0.year, m0.month, 16), 'UPI', 'Stress relief & spine alignment'],
+    // Healthcare, Mindfulness & Wellness (Healthcare budget: ₹8,000 -> spent ₹5,500, 68.8%)
+    [userId, 5500, 'Healthcare', 'Ashtanga Yoga Shala & Sound Healing Immersion', formatYMDCurrent(m0.year, m0.month, 1), 'UPI', 'Monthly mindfulness and morning yoga'],
 
-    // Education, Typography & Masterclasses
-    [userId, 4500, 'Education', 'Type Design & Variable Font Foundry Masterclass', formatYMD(m0.year, m0.month, 5), 'Credit Card', 'Advanced typographic system design'],
-    [userId, 2750, 'Education', 'Monotype Font License Bundle & Design Annuals', formatYMD(m0.year, m0.month, 13), 'Debit Card', 'Commercial font assets for client work'],
+    // Education, Typography & Masterclasses (Education budget: ₹7,000 -> spent ₹4,500, 64.3%)
+    [userId, 4500, 'Education', 'Type Design & Variable Font Foundry Masterclass', formatYMDCurrent(m0.year, m0.month, 5), 'Credit Card', 'Advanced typographic system design'],
 
-    // Other & Studio Plants
-    [userId, 3200, 'Other', 'Indoor Exotic Air-Purifying Plants & Ceramic Planters', formatYMD(m0.year, m0.month, 4), 'UPI', 'Monstera, Fiddle Leaf Fig & studio greenery'],
-    [userId, 1800, 'Other', 'Scented Soy Wax Candles & Essential Oil Diffuser', formatYMD(m0.year, m0.month, 11), 'Debit Card', 'Aromatherapy studio atmosphere'],
+    // Other & Studio Plants (Other budget: ₹5,000 -> spent ₹3,200, 64%)
+    [userId, 3200, 'Other', 'Indoor Exotic Air-Purifying Plants & Ceramic Planters', formatYMDCurrent(m0.year, m0.month, 4), 'UPI', 'Monstera, Fiddle Leaf Fig & studio greenery'],
 
     // === PAST MONTH -1 ===
     [userId, 26000, 'Rent', 'Sunlit Modern Studio Apartment - Indiranagar', formatYMD(m1.year, m1.month, 2), 'Bank Transfer', 'Monthly loft rent'],

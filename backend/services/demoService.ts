@@ -36,6 +36,14 @@ export async function generateDynamicDemoData(userId: number, options: DemoOptio
     return `${year}-${mm}-${dd}`;
   };
 
+  const formatYMDCurrent = (year: number, month: number, day: number) => {
+    const mm = String(month).padStart(2, '0');
+    const maxDay = Math.max(now.getDate(), 1);
+    const validDay = Math.min(day, maxDay);
+    const dd = String(Math.max(1, validDay)).padStart(2, '0');
+    return `${year}-${mm}-${dd}`;
+  };
+
   // Helper to get past month/year
   const getPastMonth = (offset: number) => {
     let m = currentMonth - offset;
@@ -55,10 +63,10 @@ export async function generateDynamicDemoData(userId: number, options: DemoOptio
   // --- 1. DYNAMIC INCOMES ---
   const incomeRecords = [
     // Current Month
-    [userId, 68000, 'Salary', 'Senior Software Engineer Monthly Salary', formatYMD(m0.year, m0.month, 1)],
-    [userId, 15500, 'Freelance', 'Fullstack Fintech Dashboard Consulting', formatYMD(m0.year, m0.month, 8)],
-    [userId, 4800, 'Investment', 'Nifty 50 Index Fund Quarterly Dividend', formatYMD(m0.year, m0.month, 14)],
-    [userId, 8500, 'Bonus', 'Q3 Engineering Innovation Award', formatYMD(m0.year, m0.month, 18)],
+    [userId, 68000, 'Salary', 'Senior Software Engineer Monthly Salary', formatYMDCurrent(m0.year, m0.month, 1)],
+    [userId, 15500, 'Freelance', 'Fullstack Fintech Dashboard Consulting', formatYMDCurrent(m0.year, m0.month, 7)],
+    [userId, 4800, 'Investment', 'Nifty 50 Index Fund Quarterly Dividend', formatYMDCurrent(m0.year, m0.month, 8)],
+    [userId, 8500, 'Bonus', 'Q3 Engineering Innovation Award', formatYMDCurrent(m0.year, m0.month, 9)],
 
     // Month -1
     [userId, 68000, 'Salary', 'Senior Software Engineer Monthly Salary', formatYMD(m1.year, m1.month, 1)],
@@ -84,56 +92,49 @@ export async function generateDynamicDemoData(userId: number, options: DemoOptio
 
   // --- 2. DIVERSE, DYNAMIC EXPENSES (BEYOND JUST RENT) ---
   const expenseRecords = [
-    // === CURRENT MONTH (Rich variety of daily and weekly spends) ===
-    // Rent
-    [userId, 18000, 'Rent', 'Apartment Rent - Palm Heights #402', formatYMD(m0.year, m0.month, 2), 'Bank Transfer', 'Monthly residential lease'],
+    // === CURRENT MONTH (Rich variety of daily and weekly spends filling category budgets) ===
+    // Rent (Budget: ₹18,000 -> spent ₹18,000, 100%)
+    [userId, 18000, 'Rent', 'Apartment Rent - Palm Heights #402', formatYMDCurrent(m0.year, m0.month, 2), 'Bank Transfer', 'Monthly residential lease'],
 
-    // Food & Dining
-    [userId, 4650, 'Food', 'Organic Supermarket & Whole Foods Grocery', formatYMD(m0.year, m0.month, 3), 'Debit Card', 'Monthly essential pantry, olive oil & dairy'],
-    [userId, 820, 'Food', 'Blue Tokai Artisanal Coffee & Croissants', formatYMD(m0.year, m0.month, 5), 'UPI', 'Weekend morning work session'],
-    [userId, 1450, 'Food', 'Swiggy Gourmet Dinner Delivery', formatYMD(m0.year, m0.month, 7), 'UPI', 'Friday night Thai curries'],
-    [userId, 1850, 'Food', 'Fresh Farmers Market Produce & Exotic Berries', formatYMD(m0.year, m0.month, 10), 'Cash', 'Weekly fresh greens'],
-    [userId, 3400, 'Food', 'Italian Trattoria Dinner with Colleagues', formatYMD(m0.year, m0.month, 12), 'Credit Card', 'Woodfired pizza and appetizers'],
-    [userId, 650, 'Food', 'Chipotle Burrito Bowl & Kombucha', formatYMD(m0.year, m0.month, 15), 'Debit Card', 'Quick healthy lunch'],
+    // Food & Dining (Budget: ₹13,000 -> spent ₹9,370, 72%)
+    [userId, 4650, 'Food', 'Organic Supermarket & Whole Foods Grocery', formatYMDCurrent(m0.year, m0.month, 3), 'Debit Card', 'Monthly essential pantry, olive oil & dairy'],
+    [userId, 820, 'Food', 'Blue Tokai Artisanal Coffee & Croissants', formatYMDCurrent(m0.year, m0.month, 5), 'UPI', 'Weekend morning work session'],
+    [userId, 1450, 'Food', 'Swiggy Gourmet Dinner Delivery', formatYMDCurrent(m0.year, m0.month, 7), 'UPI', 'Friday night Thai curries'],
+    [userId, 1850, 'Food', 'Fresh Farmers Market Produce & Exotic Berries', formatYMDCurrent(m0.year, m0.month, 10), 'Cash', 'Weekly fresh greens'],
+    [userId, 600, 'Food', 'Chipotle Burrito Bowl & Kombucha', formatYMDCurrent(m0.year, m0.month, 10), 'Debit Card', 'Quick healthy lunch'],
 
-    // Shopping & Tech Gear
-    [userId, 6800, 'Shopping', 'Keychron K2 Pro Mechanical Wireless Keyboard', formatYMD(m0.year, m0.month, 4), 'Credit Card', 'Hot-swappable RGB mechanical switches'],
-    [userId, 3200, 'Shopping', 'Uniqlo Airism & Smart Casual Wear', formatYMD(m0.year, m0.month, 9), 'Debit Card', 'Workplace apparel'],
-    [userId, 1450, 'Shopping', 'Anker 65W GaN Fast Charger & Braided Cable', formatYMD(m0.year, m0.month, 13), 'UPI', 'Compact travel charger'],
-    [userId, 1890, 'Shopping', 'Ergonomic Memory Foam Lumbar Support Cushion', formatYMD(m0.year, m0.month, 16), 'Credit Card', 'Home office desk ergonomics'],
+    // Shopping & Tech Gear (Budget: ₹12,000 -> spent ₹8,690, 72.4%)
+    [userId, 4800, 'Shopping', 'Keychron K2 Pro Mechanical Wireless Keyboard', formatYMDCurrent(m0.year, m0.month, 4), 'Credit Card', 'Hot-swappable RGB mechanical switches'],
+    [userId, 2440, 'Shopping', 'Uniqlo Airism & Smart Casual Wear', formatYMDCurrent(m0.year, m0.month, 9), 'Debit Card', 'Workplace apparel'],
+    [userId, 1450, 'Shopping', 'Anker 65W GaN Fast Charger & Braided Cable', formatYMDCurrent(m0.year, m0.month, 10), 'UPI', 'Compact travel charger'],
 
-    // Bills & Utilities
-    [userId, 1179, 'Bills', 'Airtel Xstream 300Mbps Fiber Broadband', formatYMD(m0.year, m0.month, 3), 'UPI', 'High-speed remote work connection'],
-    [userId, 2840, 'Bills', 'State Electricity Board Monthly Bill', formatYMD(m0.year, m0.month, 6), 'Net Banking', 'Air conditioning and appliances'],
-    [userId, 1650, 'Bills', 'AWS Cloud & Vercel Pro Hosting', formatYMD(m0.year, m0.month, 8), 'Credit Card', 'Personal projects and side databases'],
-    [userId, 799, 'Bills', 'Jio 5G Unlimited Family Postpaid Mobile', formatYMD(m0.year, m0.month, 11), 'UPI', 'Monthly cellular bill'],
-    [userId, 890, 'Bills', 'Piped Natural Gas (PNG) & Water Supply', formatYMD(m0.year, m0.month, 14), 'UPI', 'Municipal utility charges'],
+    // Bills & Utilities (Budget: ₹7,500 -> spent ₹6,468, 86.2%)
+    [userId, 1179, 'Bills', 'Airtel Xstream 300Mbps Fiber Broadband', formatYMDCurrent(m0.year, m0.month, 3), 'UPI', 'High-speed remote work connection'],
+    [userId, 2840, 'Bills', 'State Electricity Board Monthly Bill', formatYMDCurrent(m0.year, m0.month, 6), 'Net Banking', 'Air conditioning and appliances'],
+    [userId, 1650, 'Bills', 'AWS Cloud & Vercel Pro Hosting', formatYMDCurrent(m0.year, m0.month, 8), 'Credit Card', 'Personal projects and side databases'],
+    [userId, 799, 'Bills', 'Jio 5G Unlimited Family Postpaid Mobile', formatYMDCurrent(m0.year, m0.month, 10), 'UPI', 'Monthly cellular bill'],
 
-    // Transport & Mobility
-    [userId, 1500, 'Transport', 'Metro Commuter Smartcard Monthly Recharge', formatYMD(m0.year, m0.month, 2), 'UPI', 'Daily office transit pass'],
-    [userId, 1250, 'Transport', 'Airport Express & Uber Premier Ride', formatYMD(m0.year, m0.month, 7), 'UPI', 'Client on-site meeting travel'],
-    [userId, 3400, 'Transport', 'Shell V-Power Premium Petrol Refuel', formatYMD(m0.year, m0.month, 11), 'Credit Card', 'Full tank refuel'],
-    [userId, 620, 'Transport', 'EV Fast Charging Hub Session', formatYMD(m0.year, m0.month, 14), 'UPI', 'Quick DC fast-charge'],
-    [userId, 800, 'Transport', 'Fastag Highway Tolls & Airport Parking', formatYMD(m0.year, m0.month, 17), 'UPI', 'Weekend getaway tolls'],
+    // Transport & Mobility (Budget: ₹7,000 -> spent ₹4,950, 70.7%)
+    [userId, 1500, 'Transport', 'Metro Commuter Smartcard Monthly Recharge', formatYMDCurrent(m0.year, m0.month, 2), 'UPI', 'Daily office transit pass'],
+    [userId, 1250, 'Transport', 'Airport Express & Uber Premier Ride', formatYMDCurrent(m0.year, m0.month, 7), 'UPI', 'Client on-site meeting travel'],
+    [userId, 2200, 'Transport', 'Shell V-Power Premium Petrol Refuel', formatYMDCurrent(m0.year, m0.month, 10), 'Credit Card', 'Vehicle refuel'],
 
-    // Entertainment & Leisure
-    [userId, 1200, 'Entertainment', 'IMAX 3D Sci-Fi Movie Tickets & Snacks', formatYMD(m0.year, m0.month, 6), 'Credit Card', 'Weekend cinema screening'],
-    [userId, 499, 'Entertainment', 'Spotify Premium Family Plan', formatYMD(m0.year, m0.month, 9), 'UPI', 'Monthly lossless music streaming'],
-    [userId, 2100, 'Entertainment', 'Steam Summer Games & Indie Bundle', formatYMD(m0.year, m0.month, 13), 'Credit Card', 'Weekend gaming relaxation'],
-    [userId, 1600, 'Entertainment', 'Live Acoustic Jazz Club Entry & Drinks', formatYMD(m0.year, m0.month, 16), 'UPI', 'Cultural evening performance'],
+    // Entertainment & Leisure (Budget: ₹5,000 -> spent ₹3,299, 66%)
+    [userId, 1200, 'Entertainment', 'IMAX 3D Sci-Fi Movie Tickets & Snacks', formatYMDCurrent(m0.year, m0.month, 6), 'Credit Card', 'Weekend cinema screening'],
+    [userId, 499, 'Entertainment', 'Spotify Premium Family Plan', formatYMDCurrent(m0.year, m0.month, 9), 'UPI', 'Monthly lossless music streaming'],
+    [userId, 1600, 'Entertainment', 'Live Acoustic Jazz Club Entry & Drinks', formatYMDCurrent(m0.year, m0.month, 10), 'UPI', 'Cultural evening performance'],
 
-    // Healthcare & Wellness
-    [userId, 3500, 'Healthcare', 'Cult.fit Gym & Functional Fitness Pass', formatYMD(m0.year, m0.month, 1), 'Credit Card', 'Monthly athletic membership'],
-    [userId, 1350, 'Healthcare', 'Apollo Pharmacy Vitamins, Zinc & First Aid', formatYMD(m0.year, m0.month, 8), 'Debit Card', 'Immunity and recovery supplements'],
-    [userId, 1800, 'Healthcare', 'Routine Dental Scaling & Oral Health Exam', formatYMD(m0.year, m0.month, 15), 'UPI', 'Preventative dental care'],
+    // Healthcare & Wellness (Budget: ₹6,500 -> spent ₹4,850, 74.6%)
+    [userId, 3500, 'Healthcare', 'Cult.fit Gym & Functional Fitness Pass', formatYMDCurrent(m0.year, m0.month, 1), 'Credit Card', 'Monthly athletic membership'],
+    [userId, 1350, 'Healthcare', 'Apollo Pharmacy Vitamins, Zinc & First Aid', formatYMDCurrent(m0.year, m0.month, 8), 'Debit Card', 'Immunity and recovery supplements'],
 
-    // Education & Upskilling
-    [userId, 1999, 'Education', 'O\'Reilly Learning Platform Annual Sub Split', formatYMD(m0.year, m0.month, 5), 'Credit Card', 'Architecture & AI engineering books'],
-    [userId, 2899, 'Education', 'Deep Learning & System Design Masterclass', formatYMD(m0.year, m0.month, 12), 'Debit Card', 'Advanced engineering certification'],
+    // Education & Upskilling (Budget: ₹5,000 -> spent ₹3,499, 70%)
+    [userId, 1999, 'Education', 'O\'Reilly Learning Platform Annual Sub Split', formatYMDCurrent(m0.year, m0.month, 5), 'Credit Card', 'Architecture & AI engineering books'],
+    [userId, 1500, 'Education', 'System Design Masterclass Modules', formatYMDCurrent(m0.year, m0.month, 9), 'Debit Card', 'Advanced engineering certification'],
 
-    // Other & Home
-    [userId, 2100, 'Other', 'Urban Company Home Deep Cleaning Service', formatYMD(m0.year, m0.month, 4), 'UPI', 'Monthly sanitization & dusting'],
-    [userId, 1450, 'Other', 'Premium Pet Nutrition & Organic Treats', formatYMD(m0.year, m0.month, 10), 'Debit Card', 'High-protein pet kibble'],
+    // Other & Home (Budget: ₹4,000 -> spent ₹2,850, 71.3%)
+    [userId, 1400, 'Other', 'Urban Company Home Deep Cleaning Service', formatYMDCurrent(m0.year, m0.month, 4), 'UPI', 'Monthly sanitization & dusting'],
+    [userId, 1450, 'Other', 'Premium Pet Nutrition & Organic Treats', formatYMDCurrent(m0.year, m0.month, 10), 'Debit Card', 'High-protein pet kibble'],
 
     // === PAST MONTH -1 (Historical Depth) ===
     [userId, 18000, 'Rent', 'Apartment Rent - Palm Heights #402', formatYMD(m1.year, m1.month, 2), 'Bank Transfer', 'Monthly residential lease'],

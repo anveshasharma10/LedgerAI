@@ -3,6 +3,7 @@ import { query } from '../config/db.js';
 import { AuthRequest } from '../middleware/authMiddleware.js';
 import { validateAmount, validateCategory } from '../utils/validation.js';
 import { getBudgetStatus } from '../utils/helpers.js';
+import { ensureUserBudgetsForPeriod } from '../services/budgetService.js';
 
 export async function createBudget(req: AuthRequest, res: Response): Promise<void> {
   try {
@@ -77,10 +78,7 @@ export async function getBudgets(req: AuthRequest, res: Response): Promise<void>
     const month = req.query.month ? parseInt(String(req.query.month), 10) : now.getMonth() + 1;
     const year = req.query.year ? parseInt(String(req.query.year), 10) : now.getFullYear();
 
-    const budgets = await query<any>(
-      'SELECT * FROM budgets WHERE user_id = ? AND month = ? AND year = ? ORDER BY category ASC',
-      [userId, month, year]
-    );
+    const budgets = await ensureUserBudgetsForPeriod(userId, month, year);
 
     // Calculate spent amount for each category in the requested month/year
     const monthStr = `${year}-${String(month).padStart(2, '0')}`;

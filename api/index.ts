@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { initDatabase } from '../backend/config/db.js';
+import { seedInitialData } from '../backend/services/seedService.js';
 import authRoutes from '../backend/routes/authRoutes.js';
 import expenseRoutes from '../backend/routes/expenseRoutes.js';
 import incomeRoutes from '../backend/routes/incomeRoutes.js';
@@ -28,6 +29,7 @@ app.use(async (req, res, next) => {
   if (!dbInitialized) {
     try {
       await initDatabase();
+      await seedInitialData();
       dbInitialized = true;
     } catch (e) {
       console.error('Vercel DB Init Error:', e);
